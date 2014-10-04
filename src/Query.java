@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * Created by Ishh on 9/29/2014.
@@ -40,5 +40,31 @@ public class Query {
 
     public void setResults(ArrayList results) {
         this.results = results;
+    }
+
+    public LinkedHashSet<Integer> processResults(Collection<Topic> results) {
+        LinkedHashSet<Integer> ret = new LinkedHashSet<Integer>();
+        if(this.getType().equals("q")) {
+            for (Topic t : results) {
+                if(ReadFile.questionInverseIndex.containsKey(t.getId())) {
+                    ArrayList<Integer> questionList = ReadFile.questionInverseIndex.get(t.getId());
+                    ret.addAll(questionList);
+                }
+            }
+        }
+        else {
+            for(Topic t : results){
+                ret.add(t.getId());
+            }
+        }
+        int max = 0;
+        Iterator<Integer> itr = ret.iterator();
+        while(itr.hasNext() && max < this.getResultCount()) {
+            Integer num = itr.next();
+            System.out.print(num + " ");
+            max++;
+        }
+        System.out.println();
+        return ret;
     }
 }

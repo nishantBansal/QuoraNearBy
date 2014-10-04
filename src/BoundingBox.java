@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Created by Ishh on 9/28/2014.
@@ -32,16 +33,43 @@ public class BoundingBox {
         return x.toString()+","+y.toString();
     }
 
-    public static String[] getNeighbors(String boxIndex, int hop) {
+    public static HashSet<String> getNeighbors(String boxIndex, int hop) {
         String[] coordinates = boxIndex.split(",");
         int x = Integer.parseInt(coordinates[0]);
         int y = Integer.parseInt(coordinates[1]);
-        ArrayList<String> neighbors = new ArrayList<String>();
-        int x_min = (x - hop) > 0? (x - hop):0;
+        HashSet<String> neighbors = new HashSet<String>();
+        int x_min = (x - hop) > 0? (x - hop):1;
         int x_max = x + hop;
-        int y_min = (y - hop) > 0? (y - hop):0;
+        int y_min = (y - hop) > 0? (y - hop):1;
         int y_max = (y + hop);
-        return coordinates;
+
+        /* The neighbors will be
+         *      N
+         *  W [box] E
+         *      S
+         */
+
+        // South Neighbors
+        if(y_min == y - hop) {
+            for(int i = x_min; i <= x_max; i++) {
+                neighbors.add(encodeIndex(i , y_min));
+            }
+        }
+        // West Neighbors
+        if(x_min == x - hop) {
+            for(int i = y_min; i <= y_max; i++) {
+                neighbors.add(encodeIndex(x_min, i));
+            }
+        }
+        // East Neighbors
+        for(int i = y_min; i <= y_max; i++) {
+            neighbors.add(encodeIndex(x_max, i));
+        }
+        // North Neighbors
+        for(int i = x_min; i <= x_max; i++) {
+            neighbors.add(encodeIndex(i , y_max));
+        }
+        return neighbors;
     }
 }
 
@@ -54,24 +82,12 @@ class Topic {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public float getX() {
         return x;
     }
 
-    public void setX(float x) {
-        this.x = x;
-    }
-
     public float getY() {
         return y;
-    }
-
-    public void setY(float y) {
-        this.y = y;
     }
 
     Topic(int id, float x, float y) {

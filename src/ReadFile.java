@@ -69,11 +69,12 @@ public class ReadFile {
                 String questions = input.readLine();
                 String[] split = questions.split(" ");
                 int questionId = Integer.parseInt(split[0]);
-                for(int t = 1; t < split.length; t++){
+                int relatedTopics = Integer.parseInt(split[1]);
+                for(int t = 2; t < 2 + relatedTopics; t++){
                     int topicId = Integer.parseInt(split[t]);
                     if(questionInverseIndex.containsKey(topicId)) {
                         ArrayList<Integer> questionList = questionInverseIndex.get(topicId);
-                        questionList.add(questionId);
+                        questionList.add(0, questionId);
                     }
                     else {
                         ArrayList<Integer> questionList = new ArrayList<Integer>();
